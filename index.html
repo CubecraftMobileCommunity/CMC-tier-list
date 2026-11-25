@@ -4,23 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CMC tier list</title>
-  <style>body {
-  background-color: #0b0c10;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(255, 65, 54, 0.22) 0%, transparent 60%),
-    radial-gradient(circle at 85% 90%, rgba(0, 210, 255, 0.15) 0%, transparent 50%),
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
-  background-attachment: fixed;
-  color: #ffffff;</style>
-}
-    
+  <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #0f1117; color: #e2e8f0; }
+    
+    body {
+      background-color: #0b0c10;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(255, 65, 54, 0.22) 0%, transparent 60%),
+        radial-gradient(circle at 85% 90%, rgba(0, 210, 255, 0.15) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      background-attachment: fixed;
+      color: #e2e8f0;
+    }
     
     /* Navbar */
-    header { background-color: #161922; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #262b38; flex-wrap: wrap; gap: 12px; }
+    header { background-color: rgba(22, 25, 34, 0.9); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #262b38; flex-wrap: wrap; gap: 12px; }
     .logo { font-size: 1.3rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; }
     .logo span { color: #ff9933; }
     .nav-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -28,7 +28,7 @@
     .discord-btn { background-color: #5865F2; color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
 
     /* Gamemode Tabs (Scrollable on mobile) */
-    .tabs { display: flex; gap: 8px; padding: 14px 20px; background: #13161f; overflow-x: auto; border-bottom: 1px solid #262b38; white-space: nowrap; }
+    .tabs { display: flex; gap: 8px; padding: 14px 20px; background: rgba(19, 22, 31, 0.9); overflow-x: auto; border-bottom: 1px solid #262b38; white-space: nowrap; }
     .tab-btn { background: #1e2230; color: #94a3b8; border: 1px solid #2e3444; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
     .tab-btn.active { background: #2563eb; color: white; border-color: #3b82f6; }
 
@@ -37,7 +37,7 @@
 
     /* Horizontal scroll wrapper for wide tables on phone */
     .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #242936; }
-    table { width: 100%; border-collapse: collapse; background: #161922; min-width: 750px; }
+    table { width: 100%; border-collapse: collapse; background: rgba(22, 25, 34, 0.92); min-width: 750px; }
     th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #222634; }
     th { background: #1c202b; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase; }
     .player-cell { display: flex; align-items: center; gap: 10px; font-weight: 600; }
@@ -46,7 +46,7 @@
 
     /* Tier Columns Grid */
     .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-    .tier-col { background: #161922; border-radius: 10px; overflow: hidden; border: 1px solid #242936; }
+    .tier-col { background: rgba(22, 25, 34, 0.92); border-radius: 10px; overflow: hidden; border: 1px solid #242936; }
     .tier-header { padding: 10px; text-align: center; font-weight: 800; font-size: 1rem; }
     .t1 { background: #eab308; color: #000; }
     .t2 { background: #94a3b8; color: #000; }
@@ -98,7 +98,6 @@
 
   let currentTab = 'overall';
 
-  // Auto-build the tabs at the top
   function buildTabs() {
     let html = `<button class="tab-btn active" onclick="switchTab('overall', this)">🏆 Overall</button>`;
     gamemodes.forEach(gm => {
