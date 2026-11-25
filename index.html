@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India PvP Tier List</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #0f1117; color: #e2e8f0; }
+    
+    /* Navbar */
+    header { background-color: #161922; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #262b38; flex-wrap: wrap; gap: 12px; }
+    .logo { font-size: 1.3rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; }
+    .logo span { color: #ff9933; }
+    .nav-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    input#searchInput { padding: 8px 12px; border-radius: 6px; border: 1px solid #2e3444; background: #0f1117; color: white; outline: none; width: 170px; }
+    .discord-btn { background-color: #5865F2; color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
+
+    /* Gamemode Tabs (Scrollable on mobile) */
+    .tabs { display: flex; gap: 8px; padding: 14px 20px; background: #13161f; overflow-x: auto; border-bottom: 1px solid #262b38; white-space: nowrap; }
+    .tab-btn { background: #1e2230; color: #94a3b8; border: 1px solid #2e3444; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+    .tab-btn.active { background: #2563eb; color: white; border-color: #3b82f6; }
+
+    /* Main Container */
+    .container { max-width: 1250px; margin: 25px auto; padding: 0 15px; }
+
+    /* Horizontal scroll wrapper for wide tables on phone */
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #242936; }
+    table { width: 100%; border-collapse: collapse; background: #161922; min-width: 750px; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #222634; }
+    th { background: #1c202b; color: #94a3b8; font-size: 0.8rem; text-transform: uppercase; }
+    .player-cell { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+    .player-cell img { width: 28px; height: 28px; border-radius: 4px; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; background: #262b38; display: inline-block; }
+
+    /* Tier Columns Grid */
+    .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .tier-col { background: #161922; border-radius: 10px; overflow: hidden; border: 1px solid #242936; }
+    .tier-header { padding: 10px; text-align: center; font-weight: 800; font-size: 1rem; }
+    .t1 { background: #eab308; color: #000; }
+    .t2 { background: #94a3b8; color: #000; }
+    .t3 { background: #b45309; color: #fff; }
+    .t4 { background: #334155; color: #fff; }
+    .t5 { background: #1e293b; color: #94a3b8; }
+    .player-list { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .player-card { display: flex; align-items: center; justify-content: space-between; background: #1e2230; padding: 8px 10px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
+    .player-info { display: flex; align-items: center; gap: 8px; }
+    .player-info img { width: 24px; height: 24px; border-radius: 4px; }
+    .sub-rank { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; background: #2d3348; color: #cbd5e1; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">INDIA <span>PVP TIERS</span></div>
+  <div class="nav-actions">
+    <input type="text" id="searchInput" placeholder="Search IGN..." onkeyup="renderView()">
+    <a href="#" target="_blank" class="discord-btn">Join Discord</a>
+  </div>
+</header>
+
+<div class="tabs" id="tabBar"></div>
+<div class="container" id="content"></div>
+
+<script>
+  // ==========================================
+  // 1. EDIT YOUR 7 GAMEMODES HERE
+  // ==========================================
+  const gamemodes = [
+    { id: "uhc",       label: "🍎 UHC" },
+    { id: "ctf",       label: "🚩 CTF" },
+    { id: "sword",     label: "⚔️ Sword" },
+    { id: "crystal",   label: "🔮 Crystal" },
+    { id: "netherite", label: "🛡️ Netherite" },
+    { id: "axe",       label: "🪓 Axe" },
+    { id: "smp",       label: "🌲 SMP" }
+  ];
+
+  // ==========================================
+  // 2. EDIT YOUR PLAYERS HERE (Match the 'id' names above)
+  // ==========================================
+  const players = [
+    { ign: "Technoblade", points: 180, uhc: "HT1", ctf: "LT1", sword: "HT1", crystal: "LT2", netherite: "HT2", axe: "HT1", smp: "LT1" },
+    { ign: "ClownPierce", points: 155, uhc: "HT2", ctf: "HT1", sword: "HT2", crystal: "HT1", netherite: "LT1", axe: "LT2", smp: "HT1" },
+    { ign: "Marlowww",    points: 140, uhc: "LT2", ctf: "LT2", sword: "HT3", crystal: "HT1", netherite: "HT1", axe: "HT2", smp: "LT2" }
+  ];
+
+  let currentTab = 'overall';
+
+  // Auto-build the tabs at the top
+  function buildTabs() {
+    let html = `<button class="tab-btn active" onclick="switchTab('overall', this)">🏆 Overall</button>`;
+    gamemodes.forEach(gm => {
+      html += `<button class="tab-btn" onclick="switchTab('${gm.id}', this)">${gm.label}</button>`;
+    });
+    document.getElementById('tabBar').innerHTML = html;
+  }
+
+  function switchTab(tab, btn) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderView();
+  }
+
+  function renderView() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = players.filter(p => p.ign.toLowerCase().includes(query));
+    const container = document.getElementById('content');
+
+    if (currentTab === 'overall') {
+      const sorted = [...filtered].sort((a, b) => b.points - a.points);
+      let html = `<div class="table-wrap"><table><thead><tr><th>#</th><th>Player</th><th>Points</th>`;
+      gamemodes.forEach(gm => html += `<th>${gm.label}</th>`);
+      html += `</tr></thead><tbody>`;
+
+      sorted.forEach((p, i) => {
+        html += `<tr>
+          <td><strong>#${i + 1}</strong></td>
+          <td><div class="player-cell"><img src="https://mc-heads.net{p.ign}/28" alt="">${p.ign}</div></td>
+          <td>${p.points} pts</td>`;
+        gamemodes.forEach(gm => {
+          html += `<td><span class="badge">${p[gm.id] || '-'}</span></td>`;
+        });
+        html += `</tr>`;
+      });
+      html += `</tbody></table></div>`;
+      container.innerHTML = html;
+    } else {
+      const tiers = [
+        { title: "Tier 1", class: "t1", codes: ["HT1", "LT1"] },
+        { title: "Tier 2", class: "t2", codes: ["HT2", "LT2"] },
+        { title: "Tier 3", class: "t3", codes: ["HT3", "LT3"] },
+        { title: "Tier 4", class: "t4", codes: ["HT4", "LT4"] },
+        { title: "Tier 5", class: "t5", codes: ["HT5", "LT5"] }
+      ];
+      let html = `<div class="tier-grid">`;
+      tiers.forEach(t => {
+        const tierPlayers = filtered.filter(p => t.codes.includes(p[currentTab]));
+        html += `<div class="tier-col"><div class="tier-header ${t.class}">${t.title}</div><div class="player-list">`;
+        tierPlayers.forEach(p => {
+          html += `<div class="player-card">
+            <div class="player-info"><img src="https://mc-heads.net{p.ign}/24" alt=""><span>${p.ign}</span></div>
+            <span class="sub-rank">${p[currentTab]}</span>
+          </div>`;
+        });
+        html += `</div></div>`;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+  }
+
+  buildTabs();
+  renderView();
+</script>
+</body>
+</html>
